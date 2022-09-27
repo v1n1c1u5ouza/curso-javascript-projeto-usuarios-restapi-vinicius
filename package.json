@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/v1n1c1u5ouza/curso-javascript-projeto-usuarios-restapi-vinicius#readme",
   "dependencies": {
+    "body-parser": "^1.20.0",
     "consign": "^0.1.6",
-    "express": "^4.18.1"
+    "express": "^4.18.1",
+    "nedb": "^1.8.0"
   }
 }
