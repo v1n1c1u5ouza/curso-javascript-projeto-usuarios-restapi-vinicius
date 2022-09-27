@@ -11,10 +11,7 @@ module.exports = (app) => {
         db.find({}).sort({ name: 1 }).exec((err, users) => {
 
             if (err) {
-                console.log(`error: ${err}`);
-                res.status(400).json({
-                    error: err
-                })
+                app.utils.error.send(err, req, res);
             } else {
 
                 res.statusCode = 200;
@@ -34,10 +31,7 @@ module.exports = (app) => {
         db.insert(req.body, (err, user) => {
 
             if (err) {
-                console.log(`erro: ${err}`);
-                res.status(400).json({
-                    error: err
-                });
+                app.utils.error.send(err, req, res);
             } else {
                 
                 res.status(200).json(user);
