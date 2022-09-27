@@ -5,8 +5,10 @@ let db = new NeDB({
 });
 
 module.exports = (app) => {
+    
+    let route = app.route('/users');
 
-    app.get('/users', (req, res) => {
+    route.get((req, res) => {
 
         db.find({}).sort({ name: 1 }).exec((err, users) => {
 
@@ -26,7 +28,9 @@ module.exports = (app) => {
 
     });
 
-    app.post('/users', (req, res) => {
+    route.post('/users', (req, res) => {
+
+        if (!app.utils.valdator.user(app, req, res)) return false;
 
         db.insert(req.body, (err, user) => {
 
@@ -58,6 +62,8 @@ module.exports = (app) => {
 
     routeId.put((req, res) => {
 
+        if (!app.utils.valdator.user(app, req, res)) return false;
+
         console.log(req.body)
 
         db.update({ _id: req.params.id }, req.body, err => {
@@ -84,6 +90,6 @@ module.exports = (app) => {
 
         });
 
-    });    
+    });     
 
 };
