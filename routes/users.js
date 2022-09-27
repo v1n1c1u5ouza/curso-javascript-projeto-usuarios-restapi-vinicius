@@ -1,3 +1,4 @@
+const { check, validationResult } = require("express-validator");
 let NeDB = require('nedb');
 let db = new NeDB({
     filename: 'users.db',
@@ -28,21 +29,28 @@ module.exports = (app) => {
 
     });
 
-    route.post('/users', (req, res) => {
-
-        if (!app.utils.valdator.user(app, req, res)) return false;
-
-        db.insert(req.body, (err, user) => {
-
+    route.post(
+        [
+          check("name", "O nome é obrigatório.").notEmpty(),
+          check("email", "Email inválido.").notEmpty().isEmail(),
+        ],
+        (req, res) => {
+          let errors = validationResult(req);
+     
+          if (!errors.isEmpty()) {
+            app.utils.error.send(errors, req, res);
+            return false;
+          }
+     
+          db.insert(req.body, (err, user) => {
             if (err) {
-                app.utils.error.send(err, req, res);
+              app.utils.error.send(err, req, res);
             } else {
-                
-                res.status(200).json(user);
-
+              res.status(200).json(user);
             }
-        });    
-    });
+          });
+        }
+      );
 
     let routeId = app.route('/users/:id');
 
